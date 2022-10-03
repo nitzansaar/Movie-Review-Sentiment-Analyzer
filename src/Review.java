@@ -4,4 +4,16 @@ public class Review {
 
    /* you add constructors, getters and setters */
 
+    public Review(String text, int score) {
+        this.text = text;
+        this.score = score;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

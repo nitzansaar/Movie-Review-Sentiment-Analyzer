@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AnalyzerTest extends FreqDist{
+class AnalyzerTest {
 
     Analyzer a;
     @BeforeEach
@@ -60,23 +60,34 @@ class AnalyzerTest extends FreqDist{
 
     @Test
     void testTest() {
+        int numOfTests = 0;
+        double predictedScore;
         Review review = new Review("This film film sucks and is the worst film ever", 0);
         Review review1 = new Review("What an amazing amazing amazing amazing film", 5);
         Review review2 = new Review("Holy moly what an amazing film", 6);
+        Review review3 = new Review("I enjoyed it", 2);
         List<Review> testReviews = new ArrayList<>();
         testReviews.add(review);
         testReviews.add(review1);
         testReviews.add(review2);
+        testReviews.add(review3);
         a.train(testReviews);
         for (int i = 0; i < testReviews.size(); i++) {// for loop to split review into individual words
+            numOfTests++;
+            double sum = 0;
             String[] temp = testReviews.get(i).getText().split("\s");// separates based on whitespace
             for(int j = 0; j < temp.length; j++){
-                //System.out.println(temp[j]);
-                //System.out.println("Average: " + a.fd.getAverageScore(temp[j]));
+                System.out.println(temp[j]);
+                System.out.println("Average: " + a.fd.getAverageScore(temp[j]));
+                sum += a.fd.getAverageScore(temp[j]);// add up averages for each word within a review
             }
-            //System.out.println();
+            predictedScore = sum / temp.length;
+            if(i == 0){
+                assertTrue(predictedScore == .66);
+                assertFalse(predictedScore == 0);
+            }
+            System.out.println("Score: " + predictedScore);
+            System.out.println();
         }
-        assertTrue(a.fd.getAverageScore("film") == 2.2);
-        assertFalse(a.fd.getAverageScore("film") == 3);
     }
 }

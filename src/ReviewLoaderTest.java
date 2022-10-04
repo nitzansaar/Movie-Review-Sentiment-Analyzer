@@ -22,7 +22,7 @@ class ReviewLoaderTest{
             String review = scanner.nextLine();
             Review temp = new Review(review, score);
             reviews.add(temp);
-            System.out.println(score + "" + review);
+            System.out.println(score + " " + review);
         }
     }
 }

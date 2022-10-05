@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 /* this should work as-is */
 
-public class FreqDist extends WordEntry{
+public class FreqDist {
     protected HashMap<String, WordEntry> wordTable;
     
     public FreqDist() {

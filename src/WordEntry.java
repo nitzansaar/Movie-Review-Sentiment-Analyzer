@@ -6,6 +6,14 @@ public class WordEntry {
     protected int numAppearances;
     protected int totalScore;
 
+    public int getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(int totalScore) {
+        this.totalScore = totalScore;
+    }
+
     public WordEntry() {
         word = "";
         numAppearances = 0;

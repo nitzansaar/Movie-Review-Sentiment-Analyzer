@@ -20,7 +20,7 @@ public class ReviewLoader {
             String review = scanner.nextLine();
             Review review1 = new Review(review, score);
             reviews.add(review1);
-            System.out.println(score + " " + review1);
+            //System.out.println(score + " " + review1.getText());
         }
         return reviews;
     }

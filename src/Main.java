@@ -6,7 +6,8 @@ public class Main{
         Analyzer analyzer = new Analyzer();
         ArrayList<Review> reviews = analyzer.loadReviews();
         //analyzer.test(reviews);
-        analyzer.train(reviews);
-        //analyzer.learn();
+        //analyzer.train(reviews);
+        analyzer.learn();
+
     }
 }

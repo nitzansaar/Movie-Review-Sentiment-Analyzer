@@ -2,47 +2,61 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static java.lang.Character.isLetter;
 
 public class Analyzer extends ReviewLoader{
     protected FreqDist fd;
+    public static final String[] stopwords = {"i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "you're",
+            "you've", "you'll", "you'd", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she",
+            "she's", "her", "hers", "herself", "it", "it's", "its", "itself", "they", "them", "their", "theirs",
+            "themselves", "what", "which", "who", "whom", "this", "that", "that'll", "these", "those", "am", "is", "are",
+            "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing",
+            "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for",
+            "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to",
+            "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here",
+            "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some",
+            "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "can", "will", "just", "don't",
+            "should", "should've", "now", "aren't", "couldn't", "didn't", "doesn't",  "hasn't", "haven't", "isn't", "shouldn't",
+            "wasn't", "weren't", "won't", "wouldn't"};
+
 
     public Analyzer() {
         this.fd = new FreqDist();
     }
+    public boolean isJunk(String word) {
+        for (int i = 0; i < word.length(); i++){
+            if(!isLetter(word.charAt(i))){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isStopword(String word) {
+        for (int i = 0; i < stopwords.length; i++){
+            if(word.equals(stopwords[i])){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void train(List<Review> testReviews) {
-        /*for (int i = 0; i < testReviews.size(); i++){// for loop to split review into individual words
-            String [] temp = testReviews.get(i).getText().split("\s");// separates based on whitespace
-            for (int j = 0; j < temp.length; j++){
-                fd.addWordEntry(temp[j], testReviews.get(i).score);
-                WordEntry wordEntry = new WordEntry(temp[j], testReviews.get(i).score);
-                for(int k = 0; k < temp.length; k++){// loop to check for repeat words
-                    if(temp[j].equals(temp[k]) && k != j){
-                        wordEntry.addNewAppearance(testReviews.get(i).score);
-                    }
-                }
-                System.out.println(temp[j] + " appeared: " + fd.wordTable.get(temp[j]).numAppearances + " times. Total score: "
-                + fd.wordTable.get(temp[j]).totalScore);
-                //System.out.println(wordEntry.getWord() + " " + wordEntry.numAppearances + " " + wordEntry.totalScore);
-            }
-        }*/
 
         for (int i = 0; i < testReviews.size(); i++) {
             String[] temp = testReviews.get(i).getText().split("\s");
             for (int j = 0; j < temp.length; j++) {
-                fd.addWordEntry(temp[j], testReviews.get(i).score);
-                //System.out.println(temp[j] + " appeared " + a.fd.wordTable.get(temp[j]).numAppearances + " times. " +
-                        //"Total score: " + a.fd.wordTable.get(temp[j]).totalScore);
+                if(!isStopword(temp[j]) && !isJunk(temp[j])) {
+                    fd.addWordEntry(temp[j], testReviews.get(i).score);
+                }
             }
         }
     }
 
-
     public void test(List<Review> testReviews) throws FileNotFoundException {
-        float distanceBtw;
-        double predictedScore[] = new double[testReviews.size()];
+        int distanceBtw;
+        int predictedScore[] = new int[testReviews.size()];
+        double totalDistance = 0;
+        float averageDistance;
         train(testReviews);
         for (int i = 0; i < testReviews.size(); i++) {// for loop to split review into individual words
             String[] temp = testReviews.get(i).getText().split("\s");// separates based on whitespace
@@ -50,16 +64,15 @@ public class Analyzer extends ReviewLoader{
             for(int j = 0; j < temp.length; j++){
                 sum += fd.getAverageScore(temp[j]);// add up averages for each word within a review
             }
-            predictedScore[i] = sum / temp.length;
-            distanceBtw = (float) (predictedScore[i] - testReviews.get(i).score);
-            System.out.println(predictedScore[i] + " " + testReviews.get(i).score);
-            //System.out.println("Distance between predicted and actual: " + distanceBtw);
+            predictedScore[i] = (int) (sum / temp.length);
+            distanceBtw = Math.abs(predictedScore[i] - testReviews.get(i).score);
+            totalDistance += distanceBtw;
         }
+        averageDistance = (float) (totalDistance / testReviews.size());
+        System.out.println("Average distance: " + averageDistance);
     }
 
-
-
-    public void learn() throws FileNotFoundException {//list containing sublists
+    public void learn() throws FileNotFoundException {
         ArrayList<Review> reviews = loadReviews();
         ArrayList<List<Review>> sublistList = new ArrayList<>();
         int fifth = reviews.size() / 5;

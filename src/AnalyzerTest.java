@@ -29,13 +29,13 @@ class AnalyzerTest {
             String[] temp = testReviews.get(i).getText().split("\s");
             for (int j = 0; j < temp.length; j++) {
                 fd.addWordEntry(temp[j], testReviews.get(i).score);
-                //System.out.println(temp[j] + " appeared " + fd.wordTable.get(temp[j]).numAppearances + " times. " +
-                       // "Total score: " + fd.wordTable.get(temp[j]).totalScore);
             }
         }
         assertTrue(fd.wordTable.get("film").numAppearances == 4);
         assertTrue(fd.wordTable.get("amazing").numAppearances == 4);
         assertTrue(fd.wordTable.get("amazing").totalScore == 15);
+        assertFalse(fd.wordTable.get("What").numAppearances == 2);
+        assertTrue(fd.wordTable.get("What").totalScore == 5);
     }
 
     @Test
@@ -55,8 +55,6 @@ class AnalyzerTest {
             double sum = 0;
             String[] temp = testReviews.get(i).getText().split("\s");// separates based on whitespace
             for(int j = 0; j < temp.length; j++){
-                System.out.println(temp[j]);
-                System.out.println("Average: " + a.fd.getAverageScore(temp[j]));
                 sum += a.fd.getAverageScore(temp[j]);// add up averages for each word within a review
             }
             predictedScore = sum / temp.length;
@@ -64,11 +62,15 @@ class AnalyzerTest {
                 assertTrue(predictedScore == .66);
                 assertFalse(predictedScore == 0);
             }
-            if(i == 0){
+            if(i == 1){
                 assertFalse(predictedScore == 0);
             }
-            System.out.println("Score: " + predictedScore);
-            System.out.println();
+            if(i == 1){
+                assertTrue(predictedScore != 10);
+            }
+            if(i == 3){
+                assertTrue(predictedScore == 1.3333333333333333);
+            }
         }
     }
 }

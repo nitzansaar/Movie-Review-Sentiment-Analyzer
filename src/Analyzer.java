@@ -1,10 +1,14 @@
+/**
+ * Nitzan Saar Assignment 3 Sentiment Analysis
+ */
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Character.isLetter;
 
-public class Analyzer extends ReviewLoader{
+public class Analyzer{
     protected FreqDist fd;
     public static final String[] stopwords = {"i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "you're",
             "you've", "you'll", "you'd", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she",
@@ -41,7 +45,6 @@ public class Analyzer extends ReviewLoader{
     }
 
     public void train(List<Review> testReviews) {
-
         for (int i = 0; i < testReviews.size(); i++) {
             String[] temp = testReviews.get(i).getText().split("\s");
             for (int j = 0; j < temp.length; j++) {
@@ -59,7 +62,7 @@ public class Analyzer extends ReviewLoader{
         float averageDistance;
         train(testReviews);
         for (int i = 0; i < testReviews.size(); i++) {// for loop to split review into individual words
-            String[] temp = testReviews.get(i).getText().split("\s");// separates based on whitespace
+            String[] temp = testReviews.get(i).getText().split("\s");// separates words based on whitespace
             double sum = 0;
             for(int j = 0; j < temp.length; j++){
                 sum += fd.getAverageScore(temp[j]);// add up averages for each word within a review
@@ -73,7 +76,8 @@ public class Analyzer extends ReviewLoader{
     }
 
     public void learn() throws FileNotFoundException {
-        ArrayList<Review> reviews = loadReviews();
+        ReviewLoader reviewLoader = new ReviewLoader();
+        ArrayList<Review> reviews = reviewLoader.loadReviews();
         ArrayList<List<Review>> sublistList = new ArrayList<>();
         int fifth = reviews.size() / 5;
         List<Review> sublist1 = reviews.subList(0, fifth);

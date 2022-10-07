@@ -10,10 +10,6 @@ public class WordEntry {
         return totalScore;
     }
 
-    public void setTotalScore(int totalScore) {
-        this.totalScore = totalScore;
-    }
-
     public WordEntry() {
         word = "";
         numAppearances = 0;

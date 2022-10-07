@@ -22,9 +22,12 @@ class FreqDistTest{
         freqDist.wordTable.remove(word1);
         freqDist.addWordEntry(word, 7);
         freqDist.addWordEntry(word, 4);
-        assertTrue(!freqDist.wordTable.containsKey(word1));
-        System.out.println(freqDist.wordTable.get(word).totalScore);
-        System.out.println(freqDist.wordTable.get(word).numAppearances);
+        freqDist.addWordEntry(word1, score1);
+        assertTrue(freqDist.wordTable.containsKey(word1));
+        assertTrue(freqDist.wordTable.get(word).numAppearances == 3);
+        assertFalse(!freqDist.wordTable.containsKey(word1));
+        assertTrue(freqDist.wordTable.get(word1).numAppearances == 1);
+        assertFalse(freqDist.wordTable.get(word1).numAppearances == 0);
 
     }
 
@@ -43,6 +46,8 @@ class FreqDistTest{
         fd.addWordEntry(word1, 0);
         average1 = fd.getAverageScore(word1);
         assertTrue(average1 == 9.0 / 2);
+        assertFalse(fd.getAverageScore(word1) == 19);
+        assertTrue(fd.getAverageScore(word) != 123);
 
 
     }

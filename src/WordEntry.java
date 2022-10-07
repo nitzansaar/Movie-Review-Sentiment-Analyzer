@@ -1,3 +1,6 @@
+/**
+ * Nitzan Saar Sentiment Analysis
+ */
 /* this should work as-is */
 
 public class WordEntry {

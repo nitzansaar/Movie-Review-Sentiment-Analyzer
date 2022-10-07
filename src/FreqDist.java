@@ -2,6 +2,9 @@ import java.util.HashMap;
 
 /* this should work as-is */
 
+/**
+ * Nitzan Saar Sentiment Analysis
+ */
 public class FreqDist {
     protected HashMap<String, WordEntry> wordTable;
     

@@ -1,3 +1,6 @@
+/**
+ * Nitzan Saar Sentiment Analysis
+ */
 public class Review {
     protected String text;
     protected int score;
